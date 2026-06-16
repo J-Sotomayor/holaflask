@@ -2,8 +2,10 @@ version: '3.8'
 
 services:
   holaflask:
-    build: .
+    image: ghcr.io/j-sotomayor/holaflask:latest
     container_name: holaflask
+    restart: always
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.holaflask.entrypoints=http"
@@ -17,6 +19,7 @@ services:
       - "traefik.http.routers.holaflask-secure.service=holaflask"
       - "traefik.http.services.holaflask.loadbalancer.server.port=5000"
       - "traefik.docker.network=traefik-public"
+
     networks:
       - traefik-public
 

@@ -48,4 +48,4 @@ jobs:
             echo "Conexion exitosa al VPS"
             hostname
             whoami
-            uptime  
+            uptime
