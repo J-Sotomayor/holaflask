@@ -2,7 +2,8 @@ name: Build and Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
   build:
@@ -23,30 +24,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ghcr.io/j-sotomayor/holaflask:latest
 
-      - name: Mostrar variables (solo locales, no secretos)
+      - name: Mostrar configuración SSH
         run: |
-          echo "Probando conexion SSH con:"
           echo "Host: ${{ secrets.VPS_HOST }}"
           echo "Usuario: ${{ secrets.VPS_USER }}"
-          echo "Puerto: ${{ secrets.VPS_SHH_PORT }}"
-          echo "Password: ${{ secrets.VPS_PASSWORD }}"
+          echo "Puerto: ${{ secrets.VPS_SSH_PORT }}"
 
-      - name: Probar la ssh en el vps
-        uses: app/deployssh-action@v1
-        with: 
+      - name: Probar conexion SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          port: ${{ secrets.VPS_SHH_PORT }} 
+          port: ${{ secrets.VPS_SSH_PORT }}
           script: |
-           echo "Probando conexion ssh en el vps"
-           hostname
-           whoami 
-           uptime
+            echo "Conexion exitosa al VPS"
+            hostname
+            whoami
+            uptime  
